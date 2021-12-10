@@ -15,11 +15,11 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
     console.log("New connection: " + socket.id);
-    output.openVirtualPort(socket.id);
+    output.openVirtualPort('p5-test');
     socket.on('position', positionMsg);
 }
 
 function positionMsg(data) {
     console.log(data);
-    output.sendMessage([176,22,1]);
+    output.sendMessage([144,69,127]);
 }
