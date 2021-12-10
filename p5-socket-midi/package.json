@@ -1,0 +1,22 @@
+{
+  "name": "p5-socket-midi",
+  "version": "0.0.1",
+  "description": "Convert video feed to MIDI data ",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "midi",
+    "node",
+    "socketio"
+  ],
+  "author": "Sergio Scotta",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "midi": "^2.0.0",
+    "socket.io": "^4.4.0",
+    "socket.io-client": "^4.4.0"
+  }
+}
