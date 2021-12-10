@@ -1,62 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>tracking.js - color hello world</title>
-  <!-- <link rel="stylesheet" href="assets/demo.css"> -->
+  <head>
+    <meta charset="utf-8" />
+    <title>tracking.js - color with video</title>
+    <link rel="stylesheet" href="assets/demo.css" />
 
-  
+    <script src="tracking-min.js"></script>
+    <script src="../node_modules/dat.gui/build/dat.gui.min.js"></script>
+    <script src="assets/stats.min.js"></script>
+    <script src="assets/color_camera_gui.js"></script>
 
-  <style>
-  .rect {
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    left: -1000px;
-    top: -1000px;
-  }
-  </style>
-</head>
-<body>
-  <!-- <div class="demo-title">
-    <p><a href="http://trackingjs.com" target="_parent">tracking.js</a> － detect certain colors in a image</p>
-  </div> -->
+    <style>
+      .demo-container {
+        background-color: black;
+      }
 
-  <script src="tracking-min.js"></script>
-  
-  <script>
-    window.onload = function() {
-      var img = document.getElementById('img');
-      var demoContainer = document.querySelector('.demo-container');
-
-      var tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
-
-      tracker.on('track', function(event) {
-        event.data.forEach(function(rect) {
-          window.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
-        });
-      });
-
-      tracking.track('#img', tracker);
-
-      window.plot = function(x, y, w, h, color) {
-        var rect = document.createElement('div');
-        document.querySelector('.demo-container').appendChild(rect);
-        rect.classList.add('rect');
-        rect.style.border = '2px solid ' + color;
-        rect.style.width = w + 'px';
-        rect.style.height = h + 'px';
-        rect.style.left = (img.offsetLeft + x) + 'px';
-        rect.style.top = (img.offsetTop + y) + 'px';
-      };
-    };
-  </script>
-
-  <div class="demo-frame">
-    <div class="demo-container">
-      <img id="img" src="/psmove.png" />
+      video,
+      canvas {
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-frame">
+      <div class="demo-container">
+        <div id="rectangle"></div>
+        <video id="video" width="800" height="530"></video>
+        <canvas id="canvas" width="800" height="500"></canvas>
+      </div>
     </div>
-  </div>
 
-</body>
+    <script>
+      window.onload = function () {
+        //add constraints object
+        var constraints = { audio: false, video: true };
+
+        //call getUserMedia, then the magic
+        navigator.mediaDevices
+          .getUserMedia(constraints)
+          .then(function (mediaStream) {
+            var video = document.querySelector("video");
+            video.srcObject = mediaStream;
+            video.play();
+          })
+          .catch(function (err) {
+            console.log("yikes, and err!" + err.message);
+          });
+
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+
+        tracking.ColorTracker.registerColor("purple", function (r, g, b) {
+          var dx = r - 120;
+          var dy = g - 60;
+          var dz = b - 210;
+
+          if (b - g >= 100 && r - g >= 60) {
+            return true;
+          }
+          return dx * dx + dy * dy + dz * dz < 3500;
+        });
+
+        var tracker = new tracking.ColorTracker(["yellow", "purple"]);
+        tracker.setMinDimension(5);
+
+        tracking.track("#video", tracker);
+
+        tracker.on("track", function (event) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          event.data.forEach(function (rect) {
+            if (rect.color === "custom") {
+              rect.color = tracker.customColor;
+            }
+
+            context.strokeStyle = rect.color;
+            context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+            context.font = "11px Helvetica";
+            context.fillStyle = "#fff";
+            context.fillText(
+              "x: " + rect.x + "px",
+              rect.x + rect.width + 5,
+              rect.y + 11
+            );
+            context.fillText(
+              "y: " + rect.y + "px",
+              rect.x + rect.width + 5,
+              rect.y + 22
+            );
+          });
+        });
+
+        initGUIControllers(tracker);
+      };
+    </script>
+  </body>
 </html>
