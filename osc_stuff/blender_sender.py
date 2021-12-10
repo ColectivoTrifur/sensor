@@ -21,7 +21,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--ip", default="127.0.0.1",
       help="The ip of the OSC server")
-  parser.add_argument("--port", type=int, default=9001,
+  parser.add_argument("--port", type=int, default=8000,
       help="The port the OSC server is listening on")
   args = parser.parse_args()
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
       in_number = float(input().split("\n")[0])
     except:
         print("I only want numbers")
-    client.send_message("/objects/Icosphere/modifiers/Wireframe/thickness", float(in_number))
+    client.send_message("/nosotres", float(in_number))
     print(f'sent {in_number} to {args.ip}:{args.port}')
     time.sleep(1)
 
