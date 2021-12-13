@@ -21,5 +21,5 @@ function newConnection(socket) {
 
 function positionMsg(data) {
     console.log(data);
-    output.sendMessage([144,69,127]);
+    output.sendMessage([144,data,127]);
 }

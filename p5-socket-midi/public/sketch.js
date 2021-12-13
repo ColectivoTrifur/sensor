@@ -124,9 +124,9 @@ function draw() {
             //var pointOffset = i * 2;
             ellipse(curxy[i], curxy[i + 1], 8, 8);
             if (frameCount % 30 == 0) {        
-                socket.emit('position', mouseX);
-                console.log("emitted MSG ",mouseX);
-                console.log(map(curxy[i], 0, w, 0, 127))
+		let note=map(curxy[i], 0, w, 0, 127)
+                socket.emit('position', note);
+                console.log("emitted MSG ",note);
             }
         }
     }
