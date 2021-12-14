@@ -118,8 +118,8 @@ function draw() {
             if (frameCount % 30 == 0) {        
                 let note=map(curxy[i], 0, w, 0, .1); //for blender+osc
                 let noteMidi=map(curxy[i], 0, w, 0, 127)
-                socket.emit('position', note);
-                console.log("emitted MSG ",note);
+                socket.emit('position', noteMidi);
+                console.log("emitted MSG ",noteMidi);
             }
         }
     }
