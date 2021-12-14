@@ -30,7 +30,7 @@ function newConnection(socket) {
 }
 
 function play(data) {
-    const bundle = new Bundle([address, .001]);
+    const bundle = new Bundle([address, data]);
     client.send(bundle);
     console.log("sent info", bundle)
 }

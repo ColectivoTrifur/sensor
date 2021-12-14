@@ -44,7 +44,6 @@ function setup() {
 //         addPoint(random(width), random(height));
 //     }
 // }
-
 function mousePressed() {
     addPoint(mouseX, mouseY);
 }
@@ -75,7 +74,13 @@ function prunePoints() {
 }
 
 function draw() {
+    //code to flip the video
+    push();
+    translate(width,0);
+    scale(-1, 1);
     image(capture, 0, 0, w, h);
+    //image(capture, 0, 0, w, h);
+
     capture.loadPixels();
     if (capture.pixels.length > 0) { // don't forget this!
         var xyswap = prevxy;
@@ -102,14 +107,21 @@ function draw() {
             epsilon, minEigen);
         prunePoints();
 
-        for (var i = 0; i < pointCount; i=i+2) {
-            //var pointOffset = i * 2;
-            ellipse(curxy[i], curxy[i + 1], 8, 8);
+        for (var i = 0; i < pointCount; i++) {
+            var pointOffset = i * 2;
+            noStroke();
+            fill(255,0,100);
+            ellipse(curxy[pointOffset], curxy[pointOffset + 1], 15, 15);
+            stroke(0, 0, 0);
+            strokeWeight(4);
+            line(curxy[pointOffset],0,curxy[pointOffset],h);
             if (frameCount % 30 == 0) {        
-		let note=map(curxy[i], 0, w, 0, 127)
+                let note=map(curxy[i], 0, w, 0, .1); //for blender+osc
+                let noteMidi=map(curxy[i], 0, w, 0, 127)
                 socket.emit('position', note);
                 console.log("emitted MSG ",note);
             }
         }
     }
+      pop();
 }
