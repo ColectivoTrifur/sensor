@@ -1,26 +1,6 @@
-let socket;
-
-// function setup() {
-//     createCanvas(600,400);
-//     background(51);
-//     socket = io.connect('http://localhost:3000');
-// }
-
-// function mouseDragged () {
-//     let position = {
-//         x: mouseX,
-//         y: mouseY
-//     }
-//     noStroke();
-//     fill(255);
-//     ellipse(position.x, position.y, 10, 10);
-//     socket.emit('position', position)
-// }
-
-// function draw() {
-// }
-
 // https://inspirit.github.io/jsfeat/sample_oflow_lk.html
+//
+let socket;
 
 var cnv;
 var capture;
@@ -31,7 +11,9 @@ var maxPoints = 10;
 
 function setup() {
 
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect('ws://127.0.0.1:3000',{ transports : ['websocket'] });
+    //'ws://127.0.0.1:6000'
+    console.log(socket);
     capture = createCapture({
         audio: false,
         video: {

@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "midi": "^2.0.0",
+    "node-osc": "^6.1.11",
     "socket.io": "^4.4.0",
     "socket.io-client": "^4.4.0"
   }
